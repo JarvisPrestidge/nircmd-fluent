@@ -1,7 +1,14 @@
-// const { TwitchCommentDownloader } = require("../../dist/index");
+import { NirCmd } from "../../src/index";
 
-// const main = async () => {
+// Note: This example brings the window containing the sequence of
+// characters "Fortnite" to the foreground.
 
-// };
-
-// main().catch((err) => console.error(err));
+(async () => {
+    let output;
+    try {
+        output = await NirCmd.win().show().ititle("Fortnite").run();
+    } catch (error) {
+        console.error(`Failed to bring window to foreground: ${output}`);
+    }
+    console.log(output);
+})();

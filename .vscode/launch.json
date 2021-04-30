@@ -18,6 +18,18 @@
             "envFile": "${workspaceRoot}/.env",
             "program": "${workspaceRoot}/src/index.ts",
             "outFiles": ["${workspaceRoot}/dist/**/*.js"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug: PostInstall script",
+            "sourceMaps": true,
+            "internalConsoleOptions": "openOnSessionStart",
+            "preLaunchTask": "npm: build",
+            "outputCapture": "std",
+            "envFile": "${workspaceRoot}/.env",
+            "program": "${workspaceRoot}/src/scripts/postinstall.ts",
+            "outFiles": ["${workspaceRoot}/dist/**/*.js"]
         }
     ]
 }

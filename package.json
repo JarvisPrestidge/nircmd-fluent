@@ -1,24 +1,59 @@
 {
-  "name": "windows-utils",
-  "version": "0.0.1",
-  "main": "index.js",
-  "author": "Jarvis Prestidge <jarvisprestidge@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "clean": "rimraf dist",
-    "build": "yarn clean && tsc -p .",
-    "format": "prettier --write '**/*.ts'",
-    "start": "node dist/index.js"
-  },
-  "devDependencies": {
-    "@types/node": "^15.0.1",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "eslint": "^7.25.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.2.1",
-    "rimraf": "^3.0.2",
-    "typescript": "^4.2.4"
-  }
+    "name": "nircmd-fluent",
+    "version": "0.0.1",
+    "main": "index.js",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jarvisprestidge/nircmd-fluent.git"
+    },
+    "bugs": {
+        "url": "https://github.com/jarvisprestidge/nircmd-fluent/issues"
+    },
+    "author": {
+        "name": "Jarvis Prestidge",
+        "email": "jarvisprestidge@gmail.com",
+        "url": "https://jarvisprestidge.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/jarvisprestidge/nircmd-fluent/blob/master/LICENSE"
+        }
+    ],
+    "keywords": [
+        "typescript",
+        "zero deps",
+        "windows",
+        "nircmd",
+        "fluent",
+        "api"
+    ],
+    "engines": {
+        "node": ">=12"
+    },
+    "files": [
+        "dist",
+        "nircmd",
+        "package.json",
+        "yarn.lock"
+    ],
+    "scripts": {
+        "clean": "rimraf dist",
+        "build": "yarn clean && tsc -p .",
+        "format": "prettier --write '**/*.ts'",
+        "start": "node dist/index.js",
+        "prepublishOnly": "yarn build"
+    },
+    "devDependencies": {
+        "@types/node": "^15.0.1",
+        "@typescript-eslint/eslint-plugin": "^4.22.0",
+        "@typescript-eslint/parser": "^4.22.0",
+        "eslint": "^7.25.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "prettier": "^2.2.1",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.2.4"
+    }
 }

@@ -1,7 +1,14 @@
-// import { thing } from "../../src/index";
+import { NirCmd } from "../../src/index";
 
-// const main = async (): Promise<void> => {
+// Note: This example brings the window containing the sequence of
+// characters "Fortnite" to the foreground.
 
-// };
-
-// main().catch((err) => console.error(err));
+(async () => {
+    let output: string;
+    try {
+        output = await NirCmd.win().show().ititle("Fortnite").run();
+    } catch (error) {
+        console.error(`Failed to bring window to foreground: ${output}`);
+    }
+    console.log(output);
+})();
