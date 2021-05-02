@@ -1,3 +1,4 @@
+import { Result } from "../interfaces/common/result";
 import { Runner } from "../runner";
 
 /**
@@ -7,10 +8,11 @@ import { Runner } from "../runner";
  * @class NirCmdBase
  */
 export class NirCmdBase {
-    private readonly runner: Runner;
-
     public commandArgsList: string[] = [];
     public additionalArgsList: string[] = [];
+
+    private runner: Runner;
+    private hasConfirmedTargetExists = false;
 
     /**
      * Creates an instance of NirCmdBase.
@@ -30,24 +32,52 @@ export class NirCmdBase {
      *
      * @returns {Promise<string>}
      */
-    public async run(): Promise<string> {
-        // Attempt to find NirCmd binary + check access rights
-        const initResult = await this.runner.init();
-        if (!initResult.success) {
-            const errorMessage = `Failed to initialize NirCmd: ${initResult.reason}`;
-            console.error(errorMessage);
-            throw new Error(errorMessage);
-        }
+    public async run(): Promise<void> {
+        // Check if NirCmd binary exists
+        await this.checkTargetExists();
 
         // Attempt to execute command
-        const commandResult = await this.runner.run(this.commandArgsList);
-        if (!commandResult.success) {
-            const errorMessage = `Failed to execute NirCmd command: ${commandResult.reason}`;
+        const commandArgs = [...this.commandArgsList, ...this.additionalArgsList];
+        const commandResult = await this.runner.run(commandArgs);
+        this.resetState();
+        if (!commandResult.ok) {
+            const errorMessage = `Failed to execute NirCmd command: ${commandResult.err}`;
             console.error(errorMessage);
             throw new Error(errorMessage);
         }
 
-        console.log(commandResult.result);
-        return commandResult.result;
+        // console.log(commandResult.);
+        // return commandResult.result;
+    }
+
+    /**
+     * Reset command args state
+     *
+     * @private
+     */
+    private resetState(): void {
+        this.commandArgsList = [];
+        this.additionalArgsList = [];
+    }
+
+    /**
+     * Check if NirCmd binary exists
+     *
+     * @private
+     * @return {*}  {Promise<void>}
+     */
+    private async checkTargetExists(): Promise<void> {
+        if (this.hasConfirmedTargetExists) {
+            return;
+        }
+
+        const targetExistsResult = await this.runner.targetExists();
+        if (!targetExistsResult.ok) {
+            const errorMessage = `Failed to initialize NirCmd: ${targetExistsResult.err}`;
+            console.error(errorMessage);
+            throw new Error(errorMessage);
+        }
+
+        this.hasConfirmedTargetExists = true;
     }
 }

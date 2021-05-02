@@ -1,4 +1,3 @@
-import { wrapInQuotes } from "../../utils/string";
 import { AnnotateMethodName as AnnotateMethodName } from "../../utils/class";
 import { NirCmdBase } from "../base";
 
@@ -59,7 +58,7 @@ export class WinFind {
     @AnnotateMethodName()
     public class(className: string): Omit<NirCmdBase, "commandArgsList"> {
         this.base.commandArgsList.push(this.methodName);
-        this.base.commandArgsList.push(wrapInQuotes(className));
+        this.base.commandArgsList.push(className);
         return this.base;
     }
 
@@ -72,7 +71,7 @@ export class WinFind {
     @AnnotateMethodName()
     public title(title: string): NirCmdExecute {
         this.base.commandArgsList.push(this.methodName);
-        this.base.commandArgsList.push(wrapInQuotes(title));
+        this.base.commandArgsList.push(title);
         return this.base;
     }
 
@@ -85,7 +84,7 @@ export class WinFind {
     @AnnotateMethodName()
     public stitle(title: string): NirCmdExecute {
         this.base.commandArgsList.push(this.methodName);
-        this.base.commandArgsList.push(wrapInQuotes(title));
+        this.base.commandArgsList.push(title);
         return this.base;
     }
 
@@ -98,7 +97,7 @@ export class WinFind {
     @AnnotateMethodName()
     public ititle(title: string): NirCmdExecute {
         this.base.commandArgsList.push(this.methodName);
-        this.base.commandArgsList.push(wrapInQuotes(title));
+        this.base.commandArgsList.push(title);
         return this.base;
     }
 

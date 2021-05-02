@@ -4,7 +4,9 @@ import { createWriteStream } from "fs";
 import { join } from "path";
 import { unlink } from "fs/promises";
 
-const uri = process.arch === "x32" ? C.NIRCMD_DOWNLOAD_URI_X32 : C.NIRCMD_DOWNLOAD_URI_X64;
+// const uri = process.arch === "x32" ? C.NIRCMD_DOWNLOAD_URI_X32 : C.NIRCMD_DOWNLOAD_URI_X64;
+
+const uri = C.NIRCMD_DOWNLOAD_URI_X32;
 
 const fileName = uri.substring(uri.lastIndexOf("/") + 1);
 
