@@ -1,4 +1,3 @@
-import { Result } from "../interfaces/common/result";
 import { Runner } from "../runner";
 
 /**
@@ -32,22 +31,21 @@ export class NirCmdBase {
      *
      * @returns {Promise<string>}
      */
-    public async run(): Promise<void> {
-        // Check if NirCmd binary exists
+    public async run(): Promise<string> {
         await this.checkTargetExists();
 
-        // Attempt to execute command
         const commandArgs = [...this.commandArgsList, ...this.additionalArgsList];
         const commandResult = await this.runner.run(commandArgs);
-        this.resetState();
-        if (!commandResult.ok) {
-            const errorMessage = `Failed to execute NirCmd command: ${commandResult.err}`;
+
+        this.resetCommandArgsState();
+
+        if (commandResult.err) {
+            const errorMessage = `Failed to execute nircmd-fluent command: ${commandResult.err}`;
             console.error(errorMessage);
             throw new Error(errorMessage);
         }
 
-        // console.log(commandResult.);
-        // return commandResult.result;
+        return commandResult.result;
     }
 
     /**
@@ -55,7 +53,7 @@ export class NirCmdBase {
      *
      * @private
      */
-    private resetState(): void {
+    private resetCommandArgsState(): void {
         this.commandArgsList = [];
         this.additionalArgsList = [];
     }
@@ -72,8 +70,8 @@ export class NirCmdBase {
         }
 
         const targetExistsResult = await this.runner.targetExists();
-        if (!targetExistsResult.ok) {
-            const errorMessage = `Failed to initialize NirCmd: ${targetExistsResult.err}`;
+        if (targetExistsResult.err) {
+            const errorMessage = `Failed to initialize nircmd-fluent: ${targetExistsResult.reason}`;
             console.error(errorMessage);
             throw new Error(errorMessage);
         }

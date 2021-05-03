@@ -2,7 +2,7 @@ import { execFile } from "child_process";
 import { constants } from "fs";
 import { access } from "fs/promises";
 import { promisify } from "util";
-import { Ok, Err, Result } from "./interfaces/common/result";
+import { Ok, Err, Result } from "./common/result/result";
 
 const execFileAsync = promisify(execFile);
 

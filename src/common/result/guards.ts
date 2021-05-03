@@ -1,4 +1,4 @@
-import { ErrImpl, OkImpl } from "../interfaces/common/result";
+import { ErrImpl, OkImpl } from "./result";
 
 /**
  * Type guard to inform the TS compiler whether an input is a string

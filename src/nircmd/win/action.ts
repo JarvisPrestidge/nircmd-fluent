@@ -6,9 +6,9 @@ import { WinFind } from "./find";
  * Class responsible for selecting actions to take on the specified window
  *
  * @export
- * @class WinActions
+ * @class WinAction
  */
-export class WinActions {
+export class WinAction {
     private readonly base: NirCmdBase;
     private readonly methodName: string;
 

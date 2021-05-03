@@ -1,7 +1,7 @@
-import { isErrType, isOkType, isStringType } from "../../utils/guards";
+import { isErrType, isOkType, isStringType } from "./guards";
 import { toString } from "../../utils/string";
 
-export type Result<ResultType = void> = OkImpl<ResultType> | ErrImpl;
+export type Result<ResultType = void> = Ok<ResultType> | Err;
 
 /**
  * Result method contract
@@ -24,24 +24,28 @@ interface BaseResult<ResultType> {
     readonly err: boolean;
 
     /**
-     * Returns the contained `Ok` value.
-     * Because this function may throw, its use is generally discouraged.
-     * Instead, prefer to handle the `Err` case explicitly.
+     * Returns the contained `Ok` value, if exists.
+     * Throws an error if not.
      *
-     * Throws if the value is an `Err`, with a message provided by the `Err`'s value.
+     * @return {*}  {ResultType}
      */
     unwrap(): ResultType;
 
     /**
-     * Returns the contained `Ok` value or a provided default.
+     * Returns the contained `Ok` value or a provided default value.
      *
-     *  (This is the `unwrap_or` in rust)
+     * @template DefaultType
+     * @param {DefaultType} fallback The fallback value if no Ok value.
+     * @return {*}  {(ResultType | DefaultType)}
      */
     unwrapOr<DefaultType>(fallback: DefaultType): ResultType | DefaultType;
 
     /**
-     * Returns the contained `Ok` value, if exists.  Throws an error if not.
-     * @param msg the message to throw if no Ok value.
+     * Returns the contained `Ok` value, if exists.
+     * Throws an error with the specified `msg` if not.
+     *
+     * @param {string} msg The message to throw if no Ok value.
+     * @return {*}  {ResultType}
      */
     expect(msg: string): ResultType;
 }
@@ -55,9 +59,9 @@ interface BaseResult<ResultType> {
  * @template ResultType
  */
 export class OkImpl<ResultType> implements BaseResult<ResultType> {
-    public readonly ok: false;
-    public readonly err: true;
-    public readonly result!: ResultType;
+    public readonly ok: true;
+    public readonly err: false;
+    public readonly result: ResultType;
 
     /**
      * Creates an instance of Ok
@@ -69,8 +73,6 @@ export class OkImpl<ResultType> implements BaseResult<ResultType> {
             return new OkImpl(input);
         }
 
-        this.ok = false;
-        this.err = true;
         this.result = input;
     }
 
@@ -93,7 +95,9 @@ export class OkImpl<ResultType> implements BaseResult<ResultType> {
  * @class Ok
  * @template ResultType
  */
-export const Ok = OkImpl as typeof OkImpl & (<ResultType>(val?: ResultType) => OkImpl<ResultType>);
+export const Ok = OkImpl as typeof OkImpl & (<ResultType>(val?: ResultType) => Ok<ResultType>);
+
+export type Ok<ResultType> = OkImpl<ResultType>;
 
 /**
  * Contains the error value on failure
@@ -105,7 +109,7 @@ export const Ok = OkImpl as typeof OkImpl & (<ResultType>(val?: ResultType) => O
 export class ErrImpl implements BaseResult<never> {
     public readonly ok: false;
     public readonly err: true;
-    public readonly error!: Error;
+    public readonly reason: Error;
 
     /**
      * Creates an instance of Err.
@@ -117,22 +121,19 @@ export class ErrImpl implements BaseResult<never> {
             return new ErrImpl(input);
         }
 
-        this.ok = false;
-        this.err = true;
-
         if (isStringType(input)) {
-            this.error = new Error(input);
+            this.reason = new Error(input);
         } else {
-            this.error = input;
+            this.reason = input;
         }
     }
 
     public expect(msg: string): never {
-        throw new Error(`${msg} - Error: ${toString(this.error)}`);
+        throw new Error(`${msg} - Error: ${toString(this.reason)}`);
     }
 
     public unwrap(): never {
-        throw new Error(`Tried to unwrap Error: ${toString(this.error)}`);
+        throw new Error(`Tried to unwrap Error: ${toString(this.reason)}`);
     }
 
     public unwrapOr<DefaultType>(fallback: DefaultType): DefaultType {
@@ -145,20 +146,6 @@ export class ErrImpl implements BaseResult<never> {
  *
  * @class Err
  */
-export const Err = ErrImpl as typeof ErrImpl & ((err: Error | string) => ErrImpl);
+export const Err = ErrImpl as typeof ErrImpl & ((err: Error | string) => Err);
 
-// const test = (input: boolean): Result<string> => {
-//     if (input) {
-//         return Ok("yes");
-//     } else {
-//         return Err("nope");
-//     }
-// };
-
-// const example = test(true);
-
-// if (example.err) {
-//     example.
-// }
-
-// const result = example.unwrap();
+export type Err = ErrImpl;
