@@ -61,6 +61,7 @@ interface BaseResult<ResultType> {
 export class OkImpl<ResultType> implements BaseResult<ResultType> {
     public readonly ok: true;
     public readonly err: false;
+
     public readonly result: ResultType;
 
     /**
@@ -68,12 +69,17 @@ export class OkImpl<ResultType> implements BaseResult<ResultType> {
      *
      * @param {ResultType} input
      */
-    constructor(input: ResultType) {
+    constructor(input?: ResultType) {
         if (!isOkType(this)) {
             return new OkImpl(input);
         }
 
-        this.result = input;
+        this.ok = true;
+        this.err = false;
+
+        if (input) {
+            this.result = input;
+        }
     }
 
     public expect(): ResultType {
@@ -109,6 +115,7 @@ export type Ok<ResultType> = OkImpl<ResultType>;
 export class ErrImpl implements BaseResult<never> {
     public readonly ok: false;
     public readonly err: true;
+
     public readonly reason: Error;
 
     /**
@@ -120,6 +127,9 @@ export class ErrImpl implements BaseResult<never> {
         if (!isErrType(this)) {
             return new ErrImpl(input);
         }
+
+        this.ok = false;
+        this.err = true;
 
         if (isStringType(input)) {
             this.reason = new Error(input);

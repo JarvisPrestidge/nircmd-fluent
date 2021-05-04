@@ -40,7 +40,7 @@ export class NirCmdBase {
         this.resetCommandArgsState();
 
         if (commandResult.err) {
-            const errorMessage = `Failed to execute nircmd-fluent command: ${commandResult.err}`;
+            const errorMessage = `Failed to execute nircmd-fluent command: ${commandResult.reason}`;
             console.error(errorMessage);
             throw new Error(errorMessage);
         }

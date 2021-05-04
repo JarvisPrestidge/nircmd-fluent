@@ -9,6 +9,7 @@
         "strict": true,
         "pretty": true,
         "declaration": true,
+        "moduleResolution": "node",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "strictPropertyInitialization": false

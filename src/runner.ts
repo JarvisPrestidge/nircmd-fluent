@@ -39,11 +39,11 @@ export class Runner {
         try {
             ({ stdout, stderr } = await execFileAsync(this.path, args));
         } catch (error) {
-            return Err(error);
+            return new Err(error);
         }
 
         if (stderr) {
-            return Err(stderr);
+            return new Err(stderr);
         } else {
             return new Ok(stdout);
         }
@@ -58,9 +58,9 @@ export class Runner {
     public async targetExists(): Promise<Result> {
         try {
             await access(this.path, constants.F_OK);
-            return Ok();
+            return new Ok();
         } catch (error) {
-            return Err(error);
+            return new Err(error);
         }
     }
 }
